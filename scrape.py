@@ -1,43 +1,40 @@
 # Weekend challenge: go through first 10 pages, extract the text, author, tags. 
+# Imports
 from bs4 import BeautifulSoup
-import pandas as pd
 from splinter import Browser
-import re
-# Imports and setup
-browser = Browser(driver_name='chrome')
-url = "http://quotes.toscrape.com/"
-browser.visit(url)
-html = browser.html
-soup = BeautifulSoup(html, 'html.parser')
+import numpy as np
 
+def perform_scrape(website, num_pages):
+    browser = make_browser()
+    all_data = scrape_web(browser, website, num_pages)
+    close_browser(browser)
+    return all_data
+
+def make_browser():
+    browser_obj = Browser(driver_name='chrome')
+    return browser_obj
+    
+def close_browser(chrome_obj):
+    chrome_obj.quit()
+
+# Function to scrape multiple pages
+def scrape_web(chrome_obj, website, num_pages):
+    
+    chrome_obj.visit(website)
+    
+    complete_page_data = []
+    
+    for page_num in range(num_pages):
+        current_pg_html = chrome_obj.html
+        complete_page_data.extend(parse_page(current_pg_html, page_num))
+        go_next_page(chrome_obj)
+        
+    return complete_page_data
 
 # Function to parse all quotes on a page. Returns 
-def parse_page():
-    """
-    Parses the current web page to extract quotes, authors, and tags.
-
-    This function searches the HTML of the current page for elements that contain quotes,
-    their authors, and associated tags. It expects the HTML structure to contain:
-    - Quotes within <span class="text"> elements inside <div class="quote"> elements.
-    - Authors within <small class="author"> elements inside <div class="quote"> elements.
-    - Tags within <a> elements inside <div class="tags"> elements within <div class="quote"> elements.
-
-    The function extracts this data and compiles it into a list of dictionaries,
-    where each dictionary represents a quote with its corresponding author and tag.
-
-    Returns:
-        list of dict: A list of dictionaries, where each dictionary contains the keys 'author', 'quote',
-        and 'tag', representing the respective data extracted from the page.
-
-    Example:
-        >>> data = parse_page()
-        >>> print(data)
-        [{'author': 'Author 1', 'quote': 'Quote 1', 'tag': 'tag1'}, {'author': 'Author 1', 'quote': 'Quote 1', 'tag': 'tag2'}, ...]
-
-    Raises:
-        IndexError: If the expected elements (e.g., span.text, small.author) are not found within each quote.
-        This can occur if the structure of the HTML does not match the expected pattern.
-    """
+def parse_page(html_code, page_num):
+    soup = BeautifulSoup(html_code, 'html.parser')
+    
     # Gather all quotes in a list from current page
     page_quotes = [x for x in soup.select('div.quote')]
     
@@ -48,10 +45,31 @@ def parse_page():
         quote = each_quote.select('span.text')[0].text
         author = each_quote.select('span small.author')[0].text
         tags = each_quote.select('div.tags a')
-        
-        # Loop through tags to make a separate dictionary entry for each tag
-        for tag in tags:
-            page_data.append({'author': author, 'quote': quote, 'tag': tag.text})
-            
+        if len(tags) == 0:
+            page_data.append({'author': author, 'quote': quote, 'tag': np.nan})
+        else:
+            # Loop through tags to make a separate dictionary entry for each tag
+            for tag in tags:
+                page_data.append({'author': author, 'quote': quote, 'tag': tag.text})
+    
+    log_data(page_data, page_num)
     # return the list of dictionaries for the page        
-    return page_quotes
+    return page_data
+
+def go_next_page(chrome_obj):
+    next_button = chrome_obj.links.find_by_partial_text("Next")
+    if len(next_button) > 0:
+        next_button.links.find_by_partial_text("Next").click()
+    
+def log_data(data, page_num):
+    log_number_parsed = len(data)
+    with open ('log.txt', 'a') as file:
+        file.write(f'Parsed {log_number_parsed} quotes on page number {page_num + 1}.\n')
+
+
+
+
+    
+    
+    
+    
