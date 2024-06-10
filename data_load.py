@@ -1,3 +1,4 @@
+# Imports
 import pandas as pd
             
 def dump_data(csv_path: str, schema: dict, engine):

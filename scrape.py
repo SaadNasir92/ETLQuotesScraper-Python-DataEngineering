@@ -1,4 +1,3 @@
-# Weekend challenge: go through first 10 pages, extract the text, author, tags. 
 # Imports
 from bs4 import BeautifulSoup
 from splinter import Browser
