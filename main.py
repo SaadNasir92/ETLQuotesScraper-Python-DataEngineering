@@ -18,8 +18,8 @@ def main(path_to_csv):
         print('CSV file not found, performing ETL')
         perform_etl(website, pages_to_scrape)
     else:
-        pass
+        print('Data has already been scraped transformed and loaded in the database.')
 
 if __name__ == "__main__":
-    main()
+    main(csv_path)
    
