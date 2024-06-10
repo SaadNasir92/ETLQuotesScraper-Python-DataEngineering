@@ -2,8 +2,8 @@ import pandas as pd
             
 def dump_data(csv_path, schema, engine):
         result = prepare_dataframes(csv_path, schema, engine)
-        return result
-
+        print(result)
+        
 def prepare_dataframes(csv, model_schema, db_connection):
     df = pd.read_csv(csv)
     transformed_dfs = []
@@ -52,5 +52,5 @@ def merge_dataframes(left_df, right_df, join_key):
     return left_df
 
 def load_table(dataframe, table, engine):
-    dataframe.to_sql(table, con=engine, index = False, if_exists ='replace')
+    dataframe.to_sql(table, con=engine, index = False, if_exists ='append')
     return f'{table} loaded to database.'

@@ -49,7 +49,7 @@ def parse_page(html_code, page_num):
         author = each_quote.select('span small.author')[0].text
         tags = each_quote.select('div.tags a')
         if len(tags) == 0:
-            page_data.append({'author': author, 'quote': quote, 'tag': np.nan})
+            page_data.append({'author': author, 'quote': quote, 'tag': 'no_tag_found'})
         else:
             # Loop through tags to make a separate dictionary entry for each tag
             for tag in tags:
@@ -66,7 +66,7 @@ def go_next_page(chrome_obj):
     
 def log_data(data, page_num):
     log_number_parsed = len(data)
-    with open('log.txt', 'a') as file:
+    with open('resources/log.txt', 'a') as file:
         file.write(f'Parsed {log_number_parsed} quotes on page number {page_num + 1}.\n')
 
 def make_csv(data):

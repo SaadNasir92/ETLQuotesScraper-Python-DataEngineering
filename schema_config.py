@@ -1,4 +1,4 @@
-config = {
+MODEL_SCHEMA = {
     'author': {
         'primary_key': 'auth_id',
         'initial_column': ['author'],
