@@ -12,7 +12,7 @@ def dump_data(csv_path: str, schema: dict, engine):
     result = prepare_dataframes(csv_path, schema, engine)
     print(result)
         
-def prepare_dataframes(csv: str, model_schema: dict, db_connection):
+def prepare_dataframes(csv: str, model_schema: dict, db_connection) -> str:
     """
     Prepare dataframes by transforming data according to the provided schema and load them into the database.
 
@@ -28,15 +28,18 @@ def prepare_dataframes(csv: str, model_schema: dict, db_connection):
     transformed_dfs = []
     
     for table_name, config in model_schema.items():
-        
+        # grab columns needed for each table (to merge and final columns for non-merge tables)
         spliced_df = df[config['initial_column']].drop_duplicates().reset_index(drop=True)
+        # Essentially, if a primary key is not needed column
         if type(config['primary_key']) == str:
+            # make primary key column
             final_df = make_id_column(spliced_df, config['primary_key'])
+            # append non-merge tables and load them
             if not config['transform']:
                 final_df = final_df[config['all_columns']].sort_values(by=config['primary_key'])
                 transformed_dfs.append(final_df)
                 print(load_table(final_df, table_name, db_connection))
-
+        # If merge tables, grab merge table info and merge keys
         if config['transform']:
             merge_indexes = config['merge_frame_locations']
             merge_keys = config['merge_keys']
@@ -44,7 +47,7 @@ def prepare_dataframes(csv: str, model_schema: dict, db_connection):
             
             if len(merge_index_keys) > 1:
                 final_df = spliced_df
-
+            # merge and load
             for idx, key in merge_index_keys:
                 df_to_merge = transformed_dfs[idx]
                 join_key = key
@@ -101,7 +104,7 @@ def merge_dataframes(left_df, right_df, join_key: str):
     left_df = left_df.merge(right_df, on = join_key)
     return left_df
 
-def load_table(dataframe, table: str, engine):
+def load_table(dataframe, table: str, engine) -> str:
     """
     Load the dataframe into the specified database table.
 

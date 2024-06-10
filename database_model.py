@@ -76,7 +76,7 @@ def engineer_model(database_name: str, password: str, def_connection: str):
     
     return engine
 
-def create_db(db_name: str, db_url: str):
+def create_db(db_name: str, db_url: str) -> str:
     """
     Create a new PostgreSQL database with the given name.
 
@@ -97,7 +97,7 @@ def create_db(db_name: str, db_url: str):
 
     return db_name
 
-def clean_name(name: str):
+def clean_name(name: str) -> str:
     """
     Clean and format a string to be used as a database name.
 

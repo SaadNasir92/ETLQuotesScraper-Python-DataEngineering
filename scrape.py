@@ -4,7 +4,7 @@ from bs4 import BeautifulSoup
 from splinter import Browser
 import pandas as pd
 
-def perform_scrape(website: str, num_pages: int):
+def perform_scrape(website: str, num_pages: int) -> str:
     """
     Perform web scraping on the given website for a specified number of pages.
 
@@ -43,7 +43,7 @@ def close_browser(chrome_obj):
     """
     chrome_obj.quit()
 
-def scrape_web(chrome_obj, website: str, num_pages: int):
+def scrape_web(chrome_obj, website: str, num_pages: int) -> list:
     """
     Scrape multiple pages from the specified website using the provided browser instance.
 
@@ -67,7 +67,7 @@ def scrape_web(chrome_obj, website: str, num_pages: int):
         
     return complete_page_data
 
-def parse_page(html_code: str, page_num: int):
+def parse_page(html_code: str, page_num: int) -> list:
     """
     Parse all quotes on a given HTML page.
 
@@ -124,7 +124,7 @@ def log_data(data: list, page_num: int):
     with open('resources/log.txt', 'a') as file:
         file.write(f'Parsed {log_number_parsed} quotes on page number {page_num + 1}.\n')
 
-def make_csv(data: list):
+def make_csv(data: list) -> str:
     """
     Create a CSV file from the provided data using pandas library.
 
