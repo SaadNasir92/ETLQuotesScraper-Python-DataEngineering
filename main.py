@@ -1,6 +1,3 @@
-# Then query the tables from python
-# Then graph the counts of tags.
-
 #imports 
 import os
 from etl import perform_etl
