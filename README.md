@@ -72,7 +72,7 @@ The project defines the following ORM models using SQLAlchemy:
     )
     ```
 
-## SUMMARY
+## Summary
 This project effectively demonstrates a robust ETL pipeline that adheres to database normalization principles. By leveraging web scraping, data transformation, and ORM methodologies, it ensures data integrity and efficient storage in a relational database.
 
 
