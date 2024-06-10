@@ -1,35 +1,25 @@
 # Then query the tables from python
 # Then graph the counts of tags.
-# Please apply functional programming paradigm meaning, convert all your codes to reusable functions.
 
-# Import modules
-from scrape import perform_scrape
-from database_model import engineer_model
-from data_load import dump_data
-
-# Import global variables
-from schema_config import MODEL_SCHEMA
-from private_info import POSTGRES_PW, DEFAULT_DB_URL
+#imports 
+import os
+from etl import perform_etl
 
 # website & number of pages to scrape
 website = "http://quotes.toscrape.com/"
 pages_to_scrape = 10
 
-# get csv file path for scraped data
-scraped_file_path = perform_scrape(website, pages_to_scrape)
+# grab path to csv to check whether etl needs to be performed.
+csv_path = os.path.join('resources', 'scraped_data.csv')
 
-# create database in postgres and make tables and constraints
-engine = engineer_model('popular_quotes', POSTGRES_PW, DEFAULT_DB_URL)
+def main(path_to_csv):
+    # run ETL if scrape hasn't happened
+    if not os.path.exists(path_to_csv):
+        print('CSV file not found, performing ETL')
+        perform_etl(website, pages_to_scrape)
+    else:
+        pass
 
-# clean/transform data from csv to follow database constraints, then load data.
-data_to_load = dump_data(scraped_file_path, MODEL_SCHEMA, engine)
-
-
-
-
-
-
-
-
-
-
+if __name__ == "__main__":
+    main()
+   
