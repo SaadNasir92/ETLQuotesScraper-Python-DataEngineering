@@ -3,12 +3,15 @@
 from bs4 import BeautifulSoup
 from splinter import Browser
 import numpy as np
+import pandas as pd
 
 def perform_scrape(website, num_pages):
     browser = make_browser()
     all_data = scrape_web(browser, website, num_pages)
+    file = make_csv(all_data)
     close_browser(browser)
-    return all_data
+    print(f'Scraped {num_pages} pages from {website}.')
+    return file
 
 def make_browser():
     browser_obj = Browser(driver_name='chrome')
@@ -63,13 +66,11 @@ def go_next_page(chrome_obj):
     
 def log_data(data, page_num):
     log_number_parsed = len(data)
-    with open ('log.txt', 'a') as file:
+    with open('log.txt', 'a') as file:
         file.write(f'Parsed {log_number_parsed} quotes on page number {page_num + 1}.\n')
 
-
-
-
-    
-    
-    
-    
+def make_csv(data):
+    csv_path = 'resources/scraped_data.csv'
+    df = pd.DataFrame(data)
+    df.to_csv(csv_path, index=False)
+    return csv_path
