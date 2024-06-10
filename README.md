@@ -1,4 +1,4 @@
-# Quotes Scraper and Database Loader
+# QuoteScrape ETL: An ORM-Based Data Pipeline
 
 ## Objective
 
