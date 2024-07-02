@@ -2,7 +2,7 @@
 
 ## Objective
 
-The objective of this project is to scrape quotes, authors, and tags from a specified website, transform the scraped data to adhere to normalization principles, and load the cleaned data into a PostgreSQL database using Object-Relational Mapping (ORM) with SQLAlchemy.
+The objective of this project is to scrape quotes, authors, and tags from a specified website, transform the scraped data to adhere to normalization principles, and load the cleaned data into a PostgreSQL database using Object-Relational Mapping (ORM) with SQLAlchemy. 
 
 ## Approach
 
@@ -73,6 +73,6 @@ The project defines the following ORM models using SQLAlchemy:
     ```
 
 ## Summary
-This project effectively demonstrates a robust ETL pipeline that adheres to database normalization principles. By leveraging web scraping, data transformation, and ORM methodologies, it ensures data integrity and efficient storage in a relational database.
+This project effectively demonstrates a robust ETL pipeline that adheres to database normalization principles. By leveraging web scraping, data transformation, and ORM methodologies, it ensures data integrity and efficient storage in a relational database. Also, the functional programming paradigm is closley followed. 
 
 
